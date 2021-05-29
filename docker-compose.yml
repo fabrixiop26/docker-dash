@@ -13,8 +13,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dash
-    container_name: dash_dash
-    command: python dash/app.py
+    container_name: dash_app
+    command: python app.py
     volumes:
       - ./dash:/code
     ports:
