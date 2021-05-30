@@ -6,14 +6,28 @@ import dash  # (version 1.12.0) pip install dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
-
-
 import plotly.graph_objs as go
+
+from sqlalchemy import create_engine
+# Postgres username, password, and database name
+POSTGRES_ADDRESS = 'postgresdb' # Nombre del nombre del contenedor donde esta la base de datos
+POSTGRES_PORT = '5432'
+POSTGRES_USERNAME = 'postgres' # Nombre de usuario pasado como enviroment
+POSTGRES_PASSWORD = '12345' #Contraseña
+POSTGRES_DBNAME= "postgres" #Nombre de la base de datos (select current_database(); en psql)
+
+connection_format = "postgresql://{username}:{password}@{ipaddress}:{port}/{dbname}"
+
+postgres_str = connection_format.format(username=POSTGRES_USERNAME,password=POSTGRES_PASSWORD,ipaddress=POSTGRES_ADDRESS,port=POSTGRES_PORT,dbname=POSTGRES_DBNAME)
+
+# Create the connection
+cnn = create_engine(postgres_str)
 
 app = dash.Dash(__name__)
 
 # ---------- Import and clean data (importing csv into pandas)
-df = pd.read_csv("intro_bees.csv")
+# df = pd.read_csv("intro_bees.csv")
+df=pd.read_sql_query('select * from bees limit 100;', cnn)
 df = df.groupby(['state', 'ansi', 'affected_by', 'year', 'state_code'])[['pct_of_colonies_impacted']].mean()
 df.reset_index(inplace=True)
 bee_killers = ["Disease", "Other", "Pesticides", "Pests_excl_Varroa", "Unknown", "Varroa_mites"]
