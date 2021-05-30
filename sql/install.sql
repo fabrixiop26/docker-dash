@@ -9,4 +9,4 @@ CREATE TABLE bees (
     state_code VARCHAR(50)
 );
 
-COPY bees FROM 'intro_bees.csv' DELIMITER ',' CSV HEADER;
+COPY bees FROM '/docker-entrypoint-initdb.d/intro_bees.csv' DELIMITER ',' CSV HEADER;

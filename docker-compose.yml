@@ -8,6 +8,7 @@ services:
     environment:
       - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=postgres
     volumes:
       - "./db:/var/lib/postgresql/data"
     ports:
@@ -33,6 +34,8 @@ services:
       - ./jupyter:/home/jovyan
     ports:
       - "8888:8888"
+    depends_on:
+      - db
         
 
     
