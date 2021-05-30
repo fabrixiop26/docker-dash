@@ -1,4 +1,3 @@
-
 import pandas as pd
 import plotly.express as px  # (version 4.7.0)
 import plotly.graph_objects as go
@@ -8,13 +7,14 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output
 
+
+import plotly.graph_objs as go
+
 app = dash.Dash(__name__)
 
 # ---------- Import and clean data (importing csv into pandas)
-# df = pd.read_csv("intro_bees.csv")
-df = pd.read_csv("https://raw.githubusercontent.com/Coding-with-Adam/Dash-by-Plotly/master/Other/Dash_Introduction/intro_bees.csv")
-
-df = df.groupby(['State', 'ANSI', 'Affected by', 'Year', 'state_code'])[['Pct of Colonies Impacted']].mean()
+df = pd.read_csv("intro_bees.csv")
+df = df.groupby(['state', 'ansi', 'affected_by', 'year', 'state_code'])[['pct_of_colonies_impacted']].mean()
 df.reset_index(inplace=True)
 bee_killers = ["Disease", "Other", "Pesticides", "Pests_excl_Varroa", "Unknown", "Varroa_mites"]
 # ------------------------------------------------------------------------------
@@ -31,14 +31,14 @@ app.layout = html.Div([
                      {"label": "2018", "value": 2018}],
                  multi=False,
                  value=2015,
-                 style={'width': "40%"}
+                 style={'padding':"15px",'border-radius':"50px",'display': "flex", 'align-items': "center", 'justify-content': "center"}
                  ),
             
-
-    html.Div(id='output_container', children=[]),
     html.Br(),
-    dcc.Graph(id='my_bee_map', figure={}),
-
+    html.Div(id='output_container', children=[],style={'text-align': 'center'}),
+    html.Br(),
+    dcc.Graph(id='my_bee_map', figure={},style={'border-radius':"50px"}),
+    html.Br(),
     #Barras
     dcc.Dropdown(id="slct_year2",
                     options=[
@@ -48,30 +48,30 @@ app.layout = html.Div([
                         {"label": "2018", "value": 2018}],
                     multi=False,
                     value=2015,
-                    style={'width': "40%"}
+                    style={'padding':"15px",'border-radius':"50px",'display': "flex", 'align-items': "center", 'justify-content': "center"}
                     ),
                 
-
-    html.Div(id='output_container2', children=[]),
+    html.Br(),
+    html.Div(id='output_container2', children=[],style={'text-align': 'center'}),
     html.Br(),
     dcc.Graph(id='my_bee_map2', figure={}),
     
-    
+    html.Br(),
     #Lineas
     dcc.Dropdown(id="slct_impact3",
                  options=[{"label": x, "value":x} for x in bee_killers],
                  value="Pesticides",
                  multi=False,
-                 style={'width': "40%"}
-                 ),
+                 style={'transform': "translate(70%)",'border-radius':"50px",'width':"40%"}),
             
-
-    html.Div(id='output_container3', children=[]),
+    html.Br(),
+    html.Div(id='output_container3', children=[],style={'text-align': 'center'}),
     html.Br(),
     dcc.Graph(id='my_bee_map3', figure={})
 
 
-])
+]
+)
 
 # ------------------------------------------------------------------------------
 # Connect the Plotly graphs with Dash Components
@@ -82,12 +82,11 @@ app.layout = html.Div([
 )
 
 def update_graph(option_slctd):
-
     container = "The year chosen by user was: {}".format(option_slctd)
 
     dff = df.copy()
-    dff = dff[dff["Year"] == option_slctd]
-    dff = dff[dff["Affected by"] == "Varroa_mites"]
+    dff = dff[dff["year"] == option_slctd]
+    dff = dff[dff["affected_by"] == "Varroa_mites"]
 
     # Plotly Express
     fig = px.choropleth(
@@ -95,12 +94,14 @@ def update_graph(option_slctd):
         locationmode='USA-states',
         locations='state_code',
         scope="usa",
-        color='Pct of Colonies Impacted',
-        hover_data=['State', 'Pct of Colonies Impacted'],
-        color_continuous_scale=px.colors.sequential.YlOrRd,
-        labels={'Pct of Colonies Impacted': '% of Bee Colonies'},
-        template='plotly_dark'
+        color='pct_of_colonies_impacted',
+        hover_data=['state', 'pct_of_colonies_impacted'],
+        color_continuous_scale=px.colors.sequential.Purpor,
+        labels={'pct_of_colonies_impacted': '% of Bee Colonies'},
+        template='plotly'
     )
+    fig.layout.plot_bgcolor = '#e7fcf7'
+    fig.layout.paper_bgcolor = '#e7fcf7'
     return container, fig 
 @app.callback(
     [Output(component_id='output_container2', component_property='children'),
@@ -112,16 +113,16 @@ def update_graph2(option_slctd):
     container2 = "The year chosen by user was: {}".format(option_slctd)
 
     dff2 = df.copy()
-    dff2 = dff2[dff2["Year"] == option_slctd]
-    dff2 = dff2[dff2["Affected by"] == "Varroa_mites"]
+    dff2 = dff2[dff2["year"] == option_slctd]
+    dff2 = dff2[dff2["affected_by"] == "Varroa_mites"]
 
     fig2 = px.bar(
         data_frame=dff2,
-        x='State',
-        y='Pct of Colonies Impacted',
-        hover_data=['State', 'Pct of Colonies Impacted'],
-        labels={'Pct of Colonies Impacted': '% of Bee Colonies'},
-        template='plotly_dark'
+        x='state',
+        y='pct_of_colonies_impacted',
+        hover_data=['state', 'pct_of_colonies_impacted'],
+        labels={'pct_of_colonies_impacted': '% of Bee Colonies'},
+        template='plotly'
     )
 
     return container2, fig2
@@ -137,15 +138,15 @@ def update_graph3(option_slctd):
     container3 = "The bee-killer chosen by user was: {}".format(option_slctd)
 
     dff3 = df.copy()
-    dff3 = dff3[dff3["Affected by"] == option_slctd]
-    dff3 = dff3[(dff3["State"] == "Idaho") | (dff3["State"] == "New York") | (dff3["State"] == "New Mexico")]
+    dff3 = dff3[dff3["affected_by"] == option_slctd]
+    dff3 = dff3[(dff3["state"] == "Idaho") | (dff3["state"] == "New York") | (dff3["state"] == "New Mexico")]
 
     fig3 = px.line(
         data_frame=dff3,
-        x='Year',
-        y='Pct of Colonies Impacted',
-        color='State',
-        template='plotly_dark'
+        x='year',
+        y='pct_of_colonies_impacted',
+        color='state',
+        template='plotly'
     )
 
     return container3, fig3
@@ -153,4 +154,4 @@ def update_graph3(option_slctd):
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(host="0.0.0.0", port=8080,debug=True)
+    app.run_server(host="localhost", port=8080,debug=True)
