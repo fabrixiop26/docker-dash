@@ -1,0 +1,7 @@
+FROM postgres:13.3
+
+#copio el archivo inical para llenar
+COPY sql/intro_bees.csv /docker-entrypoint-initdb.d/
+COPY sql/*.sql /docker-entrypoint-initdb.d/
+#COPY sql/post-install.sh /docker-entrypoint-initdb.d/
+
