@@ -4,11 +4,12 @@ services:
     image: postgres:13.3
     container_name: postgresdb
     environment:
+      - POSTGRES_USERNAME=postgres
       - POSTGRES_PASSWORD=12345
     volumes:
       - "./db:/var/lib/postgresql/data"
     ports:
-      - "5432:5432"
+      - "5433:5432"
   dash:
     build:
       context: .
