@@ -8,4 +8,4 @@ COPY dash/requirements.txt /code/
 RUN pip install -r requirements.txt
 #Copio app.py a code
 COPY dash/app.py /code/
-COPY wait-for-it.sh /code/
+RUN chmod +x /code/*
