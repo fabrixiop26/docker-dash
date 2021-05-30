@@ -1,7 +1,8 @@
-psycopg2>=2.7,<3.0
-dash==1.11.0
+dash
 pandas
 plotly.express
 dash_core_components
 dash_html_components
+sqlalchemy 
+psycopg2-binary
 
