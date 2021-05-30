@@ -4,4 +4,4 @@ pandas
 plotly.express
 dash_core_components
 dash_html_components
-cdata.postgresql
+
