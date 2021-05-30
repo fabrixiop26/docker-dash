@@ -30,8 +30,11 @@ services:
       context: .
       dockerfile: Dockerfile.notebook
     container_name: notebook
+    environment:
+      - JUPYTER_TOKEN=password
+      - JUPYTER_ENABLE_LAB=yes
     volumes:
-      - ./jupyter:/home/jovyan
+      - ./jupyter:/home/jovyan/work
     ports:
       - "8888:8888"
     depends_on:
