@@ -18,7 +18,7 @@ services:
       context: .
       dockerfile: Dockerfile.dash
     container_name: dash_app
-    command: python app.py
+    command: ["./wait-for-it.sh", "db:5432", "--", "python", "app.py"]
     volumes:
       - ./dash:/code
     ports:
