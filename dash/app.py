@@ -27,7 +27,7 @@ app = dash.Dash(__name__)
 
 # ---------- Import and clean data (importing csv into pandas)
 # df = pd.read_csv("intro_bees.csv")
-df=pd.read_sql_query('select * from bees limit 100;', cnn)
+df=pd.read_sql_query('select * from bees;', cnn)
 df = df.groupby(['state', 'ansi', 'affected_by', 'year', 'state_code'])[['pct_of_colonies_impacted']].mean()
 df.reset_index(inplace=True)
 bee_killers = ["Disease", "Other", "Pesticides", "Pests_excl_Varroa", "Unknown", "Varroa_mites"]
@@ -168,4 +168,4 @@ def update_graph3(option_slctd):
 
 # ------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(host="localhost", port=8080,debug=True)
+    app.run_server(host='0.0.0.0', port=8080, debug=True)
