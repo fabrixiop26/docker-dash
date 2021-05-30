@@ -20,7 +20,7 @@ services:
     container_name: dash_app
     volumes:
       - ./dash:/code
-    command: ["./wait-for-it.sh", "db:5432", "--", "python", "app.py"]
+    command: "bash ./wait-for-it.sh db:5432 -- python app.py"
     ports:
       - "80:8080"
     depends_on:
