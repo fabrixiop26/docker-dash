@@ -1,4 +1,4 @@
-version: "3"
+version: "3.3"
 services:
   db:
     build:
@@ -18,9 +18,9 @@ services:
       context: .
       dockerfile: Dockerfile.dash
     container_name: dash_app
-    command: ["./wait-for-it.sh", "db:5432", "--", "python", "app.py"]
     volumes:
       - ./dash:/code
+    command: ["./wait-for-it.sh", "db:5432", "--", "python", "app.py"]
     ports:
       - "80:8080"
     depends_on:
